@@ -54,6 +54,8 @@ def chat_completions(req: ChatRequest):
             pad_token_id=tokenizer.eos_token_id,
         )
     text = tokenizer.decode(out[0][input_ids.shape[1]:], skip_special_tokens=True)
+    del out, input_ids
+    torch.cuda.empty_cache()
     return {
         "id": "chatcmpl-local",
         "object": "chat.completion",

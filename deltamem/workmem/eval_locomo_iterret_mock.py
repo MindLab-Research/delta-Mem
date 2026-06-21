@@ -34,7 +34,7 @@ from iterret.memory_builder import DialogueTurn, build_ctc_graph_from_dialogue
 DATA_FILE = "data/locomo10.json"
 BASE_MODEL_PATH = "/data6/rahulsiripur/models/Qwen3-4B-Instruct-2507"
 ADAPTER_DIR = "/data6/rahulsiripur/models/delta-mem_qwen3_4b-instruct"
-OUTPUT_FILE = "/data6/rahulsiripur/outputs/workmem_iterret_mock_smoke.json"
+OUTPUT_FILE = "/data6/rahulsiripur/outputs/workmem_iterret_full.json"
 
 MAX_SAMPLES = 1
 MAX_QUESTIONS_PER_SAMPLE = 10
@@ -91,7 +91,9 @@ def main() -> None:
 
     bank = empty_experience_bank()
 
-    samples = json.load(open(DATA_FILE))[:MAX_SAMPLES]
+    samples = json.load(open(DATA_FILE))
+    if MAX_SAMPLES is not None:
+        samples = samples[:MAX_SAMPLES]
     results = []
 
     for sample_idx, sample in enumerate(samples):

@@ -8,6 +8,7 @@ from deltamem.core.delta_impl import (
     reset_delta_mem_states,
 )
 from deltamem.runtime.session import DeltaMemChatSession
+from deltamem.eval.locomo_protocol import OFFICIAL_QA_PROMPT, OFFICIAL_MAX_NEW_TOKENS
 
 def populate_osam_from_evidence(session, evidence_list, *, reset=True):
     """Phase 1. evidence_list: list[str], one retrieved unit per string (E_T)."""
@@ -25,4 +26,6 @@ def populate_osam_from_evidence(session, evidence_list, *, reset=True):
 def answer_with_osam(session, query, **gen_kwargs):
     """Phase 2. Token-granularity writes; generates on the evidence-populated S."""
     set_delta_mem_write_granularity(session.model, "token")
-    return session.generate_reply(query, **gen_kwargs)
+    formatted_query = OFFICIAL_QA_PROMPT.format(query)
+    gen_kwargs.setdefault("max_new_tokens", OFFICIAL_MAX_NEW_TOKENS)
+    return session.generate_reply(formatted_query, **gen_kwargs)

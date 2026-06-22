@@ -2345,6 +2345,11 @@ def set_delta_mem_write_enabled(model: nn.Module, enabled: bool) -> None:
     for _, module in iter_delta_mem_modules(model):
         module.set_write_enabled(enabled)
 
+def set_delta_mem_write_granularity(model: nn.Module, granularity: str) -> None:
+    granularity = normalize_memory_write_granularity(granularity)
+    for _, module in iter_delta_mem_modules(model):
+        module.memory_write_granularity = granularity
+
 
 def set_delta_mem_write_message_ids(
     model: nn.Module,
